@@ -7,6 +7,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -19,7 +20,17 @@ import androidx.navigation.navArgument
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.NavigationActivityOne.route) {
+    NavHost(navController = navController, startDestination = "splash_screen") {
+
+        composable("splash_screen") {
+            SplashScreen(navController = navController)
+        }
+        composable("main_screen")
+        {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "MAIN SCREEN", color = Color.White)
+            }
+        }
         composable(route = Screen.NavigationActivityOne.route) {
             NavigationActivityOne(navController = navController)
         }
@@ -36,46 +47,16 @@ fun Navigation() {
         ) { entry ->
             NavigationActivityTwo(name = entry.arguments?.getString("name")!!)
         }
-    }
-}
-
-@Composable
-fun NavigationActivityOne(navController: NavController) {
-    var text by remember {
-        mutableStateOf("")
-    }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(horizontal = 50.dp)
-    ) {
-        TextField(value = text, onValueChange = {
-            text = it
-        }, modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            onClick = { navController.navigate(Screen.NavigationActivityTwo.withArgs(text)) },
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text(text = "To Details Screen")
-        }
-    }
-}
-
-@Composable
-fun NavigationActivityTwo(name: String) {
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        Text(text = "Hello $name")
 
     }
 }
+
+
+
 
 @Composable
 @Preview
-fun PreviewOne()
-{
+fun PreviewOne() {
     val navController = rememberNavController()
     NavigationActivityOne(navController)
 }

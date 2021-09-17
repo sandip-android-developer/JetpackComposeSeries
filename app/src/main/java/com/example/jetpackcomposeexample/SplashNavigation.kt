@@ -31,52 +31,9 @@ class SplashNavigation : ComponentActivity() {
                 color = Color(0xFF202020),
                 modifier = Modifier.fillMaxSize()
             ) {
-                NavigationSplash()
+                Navigation()
             }
         }
     }
 }
 
-@Composable
-fun NavigationSplash() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "splash_screen") {
-        composable("splash_screen") {
-            SplashScreen(navController = navController)
-        }
-        composable("main_screen")
-        {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "MAIN SCREEN", color = Color.White)
-            }
-        }
-    }
-}
-
-@Composable
-fun SplashScreen(navController: NavController) {
-    val scale = remember {
-        androidx.compose.animation.core.Animatable(0f)
-    }
-    LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 0.3f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = {
-                    OvershootInterpolator(2f).getInterpolation(it)
-                }
-            )
-        )
-        delay(5000L)
-        navController.navigate("main_screen")
-    }
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_compose),
-            contentDescription = "logo",
-            modifier = Modifier.scale(scale.value)
-        )
-    }
-
-}
