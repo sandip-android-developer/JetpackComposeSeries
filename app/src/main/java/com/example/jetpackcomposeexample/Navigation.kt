@@ -18,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 
 @Composable
-fun Navigation() {
+fun Navigation(navigateToDashboard: (String) -> Unit) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "splash_screen") {
 
@@ -32,7 +32,7 @@ fun Navigation() {
             }
         }
         composable(route = Screen.NavigationActivityOne.route) {
-            NavigationActivityOne(navController = navController)
+            NavigationActivityOne(navController = navController,navigateToDashboard = navigateToDashboard)
         }
         composable(
             /*If we want to multiple value then we have to pass like /{name}/{age}/{rollno}*/
@@ -58,5 +58,5 @@ fun Navigation() {
 @Preview
 fun PreviewOne() {
     val navController = rememberNavController()
-    NavigationActivityOne(navController)
+   // NavigationActivityOne(navController)
 }

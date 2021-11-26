@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JetpackComposeExample">
         <activity
-            android:name=".BottomNavigation"
+            android:name=".SplashNavigation"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.JetpackComposeExample.NoActionBar">
@@ -23,6 +23,8 @@
         <!--  <activity android:name=".NavigationActivityOne" />-->
         <activity android:name=".NavigationActivityTwo" />
         <activity android:name=".NavigationActivityOne" />
+        <activity android:name=".ChatDetailsActivity" />
+        <activity android:name=".BottomNavigation" />
     </application>
 
 </manifest>

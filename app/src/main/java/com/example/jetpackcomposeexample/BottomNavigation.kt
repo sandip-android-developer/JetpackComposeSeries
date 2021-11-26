@@ -1,11 +1,11 @@
 package com.example.jetpackcomposeexample
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,33 +20,54 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.jetpackcomposeexample.ui.theme.JetpackComposeExampleTheme
 
 class BottomNavigation : ComponentActivity() {
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
-
-            Scaffold(
-                bottomBar = {
-                    BottomNavigationBar(
-                        items = listOf(
-                            BottomNavigationScreens.Home,
-                            BottomNavigationScreens.Chat,
-                            BottomNavigationScreens.Settings
-                        ),
-                        navController = navController,
-                        onItemClick = {
-                            navController.navigate(it.route)
-                        }
-                    )
+            JetpackComposeExampleTheme {
+                MyApp{
+                    startActivity(ChatDetailsActivity.newIntent(this,it))
                 }
-            ) {
-                BottomNav(navController = navController)
             }
-
         }
+    }
+    companion object {
+        private const val ARGS_ID = "args_id"
+        fun newIntent(context: Context, param: String) =
+            Intent(context, BottomNavigation::class.java).apply {
+                putExtra(ARGS_ID, param)
+            }
+    }
+
+    private val argsValue: String by lazy {
+        intent?.getStringExtra(ARGS_ID) as String
+    }
+
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun MyApp(navigateToDetails: (String) -> Unit) {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                items = listOf(
+                    BottomNavigationScreens.Home,
+                    BottomNavigationScreens.Chat,
+                    BottomNavigationScreens.Settings
+                ),
+                navController = navController,
+                onItemClick = {
+                    navController.navigate(it.route)
+                }
+            )
+        }
+    ) {
+        BottomNav(navController = navController,navigateToDetails = navigateToDetails)
     }
 }
 
@@ -94,20 +115,22 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun BottomNav(navController: NavHostController) {
+fun BottomNav(navController: NavHostController,navigateToDetails: (String) -> Unit) {
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable("chat") {
-            ChatScreen()
+            ChatScreen(navController = navController,navigateToDetails =navigateToDetails )
         }
         composable("settings") {
-            SettingsScreen()
+            SettingScreen(navController = navController)
         }
     }
+
 }
 
+/*
 @Composable
 fun HomeScreen() {
     Box(
@@ -139,4 +162,5 @@ fun SettingsScreen() {
     {
         Text(text = "Settings Screen")
     }
-}
+}*/
+
